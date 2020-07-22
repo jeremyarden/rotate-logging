@@ -1,5 +1,23 @@
 #!/bin/bash
 
+if ! zip_loc="$(type -p zip)" || [[ -z $zip_loc ]]
+then
+    DISTRO=$(cat /etc/*release | grep '^ID=' | grep -o '".*"' | sed 's/"//g')
+
+    if [ $DISTRO == "ubuntu" ] || [ $DISTRO == "debian" ] || [ $DISTRO == "linuxmint" ]
+    then
+        sudo apt install zip
+    elif [ $DISTRO == "rhel" ] || [ $DISTRO == "fedora" ] || [ $DISTRO == "centos" ]
+    then
+        sudo dnf install zip
+    elif [ $DISTRO == "arch" ] ||  [ $DISTRO == "manjaro" ]
+    then
+        sudo pacman -S zip
+    else
+        echo "Distro unknown. Please install zip"
+    fi
+fi
+
 if [ -z $1 ]
 then
     echo "Please enter log path"
