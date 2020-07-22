@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ -z $1 ]
 then
     echo "Please enter log path"
@@ -36,6 +35,7 @@ getLatestVer() {
 }
 
 rotate() {
+    removeFileOlderThan
     getLatestVer
 
     if [ "$file_size" -ge "$log_size" ] || [ "$current_time" == "00:05:00" ]
@@ -53,7 +53,7 @@ rotate() {
             zip -v "${file_name%%.*}-${current_date}".zip.2 "$temp_filename"
             rm "$temp_filename"
             ;;
-        [1-9][0-9]*)
+        [1-9]*)
             latest_ver=$((latest_ver + 1))
             mv ${file_name} ${temp_filename} && touch ${file_name}
             zip -v "${file_name%%.*}-${current_date}".zip."${latest_ver}" "$temp_filename"
